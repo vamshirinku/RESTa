@@ -1,0 +1,63 @@
+Create a New Player (POST):
+javascript
+Copy code
+app.post('/players', async (req, res) => {
+  try {
+    const newPlayer = new Player(req.body); // Assuming you have a "Player" model
+    const savedPlayer = await newPlayer.save();
+    res.status(201).json(savedPlayer);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+Get a Player by ID (GET):
+javascript
+Copy code
+app.get('/players/:id', async (req, res) => {
+  try {
+    const player = await Player.findById(req.params.id);
+    if (!player) throw new Error('Player not found');
+    res.status(200).json(player);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+});
+Update a Player by ID (PATCH):
+javascript
+Copy code
+app.patch('/players/:id', async (req, res) => {
+  try {
+    const updatedPlayer = await Player.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!updatedPlayer) throw new Error('Player not found');
+    res.status(200).json(updatedPlayer);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+});
+Delete a Player by ID (DELETE):
+javascript
+Copy code
+app.delete('/players/:id', async (req, res) => {
+  try {
+    const deletedPlayer = await Player.findByIdAndRemove(req.params.id);
+    if (!deletedPlayer) throw new Error('Player not found');
+    res.status(204).send();
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+});
+List All Players (GET):
+javascript
+Copy code
+app.get('/players', async (req, res) => {
+  try {
+    const players = await Player.find();
+    res.status(200).json(players);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
